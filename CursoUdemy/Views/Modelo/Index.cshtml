@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="Agregar()">
+    Agregar
+</button>
+
+@using (Ajax.BeginForm("Filtro", "Modelo", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivModelo", InsertionMode = InsertionMode.Replace }, new { @id = "frmFiltro" }))
+{
+    @Html.Label("Busqueda: ")
+    @Html.TextBox("nombree", null, new { @class = "form-control" })
+    <div id="DivModelo">
+        @Html.Partial("_TablaModelo")
+    </div>
+
+}
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Ajax.BeginForm("Agregar", "Modelo", null, new AjaxOptions { HttpMethod = "POST",UpdateTargetId="DivError", OnSuccess = "Guardar" }))
+            {
+            <div class="modal-body">
+                @Html.Hidden("Titulo")
+                @Html.Label("ID")
+                @Html.TextBox("iidmodelo", null, new { @class="form-control",@ReadOnly=true})
+                @Html.Label("Nombre")
+                @Html.TextBox("nombre",null, new { @class="form-control"})
+                @Html.Label("Descripción")
+                @Html.TextBox("descripcion", null, new {@class="form-control"})
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrar" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+            </div>
+            }
+            <div id="DivError"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var nombre = document.getElementById("nombree");
+    nombre.onkeyup = function () {
+        $("#frmFiltro").trigger("submit")
+    }
+    function Agregar() {
+        document.getElementById("Titulo").value = 1;
+        document.getElementById("nombre").value = "";
+        document.getElementById("descripcion").value = "";
+    }
+    function Guardar(Resultado) {
+        if (Resultado == "1") {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnCerrar").click();
+            alert("Se agrego con exito");
+        } else {
+            alert("Ha ocurrido un error");
+        }
+        
+
+    }
+</script>

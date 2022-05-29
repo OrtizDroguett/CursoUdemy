@@ -1,0 +1,27 @@
+﻿@using CursoUdemy.Models
+@model List<RolMV>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <td width="5%">@Html.LabelFor(model => Model[0].iidrol)</td>
+            <td width="15%">@Html.LabelFor(model => Model[0].nombre)</td>
+            <td width="68%">@Html.LabelFor(model => Model[0].descripcion)</td>
+            <td width="12%">Operaciones</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.iidrol</td>
+                <td>@item.nombre</td>
+                <td>@item.descripcion</td>
+                <td>
+                    <button type="button" onclick="Editar(@item.iidrol)" class="btn btn-primary fa fa-edit" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+                    <button type="button" onclick="Eliminar(@item.iidrol)" class="btn btn-danger fa fa-trash" data-bs-toggle="modal" data-bs-target="#exampleModalConfirmacion"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

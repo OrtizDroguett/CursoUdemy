@@ -1,0 +1,64 @@
+﻿@model IEnumerable<CursoUdemy.Models.ViajeMV>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.iidviaje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fechaviaje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.numeroasientosdisponibles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombreOrigen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombreDestino)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombreBus)
+            </th>
+            <th> Operaciones</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.iidviaje)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fechaviaje)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numeroasientosdisponibles)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombreOrigen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombreDestino)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombreBus)
+                </td>
+                <td>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary fa fa-edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    
+
+</table>

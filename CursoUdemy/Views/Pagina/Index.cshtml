@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="Agregar()">
+    Agregar
+</button>
+@using (Ajax.BeginForm("Filtro", "Pagina", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPagina", InsertionMode = InsertionMode.Replace }, new { @id = "frmFiltro" }))
+{
+    @Html.Label("Filtrar por: ")
+    @Html.TextBox("nombree", null, new { @class = "form-control" })
+    <div id="DivPagina">
+        @Html.Partial("_TablaPagina")
+    </div>
+}
+
+<!-- Modal guardar editar-->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Registrar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Ajax.BeginForm("Agregar", "Pagina", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivError", OnSuccess = "Guardar" }))
+            {
+                <div class="modal-body">
+                    @Html.Hidden("Titulo")
+                    @Html.Label("Mensaje")
+                    @Html.TextBox("mensaje", null, new { @class = "form-control" })
+                    @Html.Label("Acción")
+                    @Html.TextBox("accion", null, new { @class = "form-control" })
+                    @Html.Label("Controlador")
+                    @Html.TextBox("controlador", null, new { @class = "form-control" })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCerrar" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                </div>
+            }
+            <div id="DivError"></div>
+        </div>
+    </div>
+</div>
+<!-- Modal Eliminar-->
+<div class="modal fade" id="staticBackdropConfirmacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Eliminar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Ajax.BeginForm("Eliminar", "Pagina", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "BorrarMensaje" }))
+            {
+                <div class="modal-body">
+                    @Html.Hidden("TituloEliminar")
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCerrarConfirmacion" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    var nombre = document.getElementById("nombree");
+    nombre.onkeyup = function () {
+        $("#frmFiltro").trigger("submit")
+    }
+    function limpiar() {
+        document.getElementById("mensaje").value = "";
+        document.getElementById("accion").value = "";
+        document.getElementById("controlador").value = "";
+        document.getElementById("DivError").innerHTML = "";
+    }
+    function Agregar() {
+        document.getElementById("Titulo").value = -1;
+        limpiar();
+    }
+    function Guardar(Resultado) {
+        if (Resultado == "1" || Resultado == "0") {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnCerrar").click();
+            alert("Se ha guardado con exito");
+        } else {
+            alert("Ha ocurrido un error y no se ha guardado");
+        }
+    }
+    function Editar(idPagina) {
+        limpiar();
+        document.getElementById("Titulo").value = idPagina;
+        $.get("recuperarDatos/?Titulo=" + idPagina, function (Data) {
+            document.getElementById("mensaje").value = Data.mensaje;
+            document.getElementById("accion").value = Data.accion;
+            document.getElementById("controlador").value = Data.controlador;
+        })
+    }
+    function Eliminar(idPagina) {
+        document.getElementById("TituloEliminar").value = idPagina;
+    }
+    function BorrarMensaje(Resultado) {
+        if (Resultado == "1") {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnCerrarConfirmacion").click();
+            alert("Se ejecuto con exito");
+        } else {
+            alert("Ha ocurrido un error");
+        }
+    }
+</script>

@@ -1,0 +1,68 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> listarLugar = (List<SelectListItem>)ViewBag.listarLugar;
+    List<SelectListItem> listarBus = (List<SelectListItem>)ViewBag.listarBus;
+}
+
+<h2>Index</h2>
+
+<p>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Agregar </button>
+
+</p>
+@using (Ajax.BeginForm("FiltroTabla", "Viaje", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivViaje", InsertionMode = InsertionMode.Replace }, new { @id = "frmFiltro" }))
+{
+    @Html.TextBox("nombreFiltro")
+    <div id="DivViaje">
+        @Html.Partial("_TablaViaje")
+    </div>
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Agregar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("titulo")
+                @Html.Label("Origen")
+                @Html.DropDownList("iidlugarorigen", listarLugar, new { @class = "form-control" })
+                @Html.Label("Destino")
+                @Html.DropDownList("iidlugardestino", listarLugar, new { @class = "form-control" })
+                @Html.Label("Precio")
+                @Html.Editor("precio", null, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.Label("Bus")
+                @Html.DropDownList("iidbus", listarBus, new { @class = "form-control" })
+                @Html.Label("Numero de asientos")
+                <div>
+                    @Html.Editor("numeroasientosdisponibles", null, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div>
+                    @Html.Label("Foto")
+                    <img width="150" height="150" id="imgFoto" style="display:block" />
+                    @Html.TextBox("foto", "", new { type = "file", id = "fupFoto" })
+                </div>
+                <div>
+                    @Html.Hidden("nombreFoto")
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var placaFiltro = document.getElementById("nombreFiltro");
+    placaFiltro.onkeyup = function () {
+        $("#frmFiltro").trigger("submit")
+    }
+</script>

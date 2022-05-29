@@ -1,0 +1,58 @@
+﻿@model List<CursoUdemy.Models.MarcaMV>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm("Index", "Marca", FormMethod.Post, new { @id = "frmIndex" }))
+{ 
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div>
+    @Html.Label("Panel de busqueda")
+    @Html.TextBox("nombre", null, new { @class = "form-control" })
+    <button type="submit" class="btn btn-success form-control">Buscar</button>
+</div>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(p=>Model[0].iidmarca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(p => Model[0].nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(p => Model[0].descripcion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+   
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.iidmarca)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.descripcion)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}

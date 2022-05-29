@@ -1,0 +1,114 @@
+﻿@using CursoUdemy.Models
+@model List<RolPaginaMV>
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> listaRol = (List<SelectListItem>)ViewBag.listaRol;
+    List<SelectListItem> listaPagina = (List<SelectListItem>)ViewBag.listaPagina;
+}
+
+<h2>Index</h2>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="Agregar()">
+    Agregar
+</button>
+@using (Ajax.BeginForm("Filtro", "RolPagina", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivRolPagina", InsertionMode = InsertionMode.Replace }, new { @id = "frmFiltro" }))
+{
+    @Html.DropDownList("iidrolFiltrar", listaRol, new { @class = "form-control" })
+    <div id="DivRolPagina">
+        @Html.Partial("_TablaRolPagina")
+    </div>
+
+}
+
+<!-- Modal Eliminación-->
+<div class="modal fade" id="staticBackdropConfirmacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCerrarConfirmacion" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" onclick="EliminarDato()" class="btn btn-primary">Aceptar</button>
+                </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Ajax.BeginForm("Agregar", "RolPagina", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivErrorRolPagina", OnSuccess = "Guardar" }))
+            {
+                <div class="modal-body">
+                    @Html.Hidden("Titulo")
+                    @Html.Label("Rol Pagina")
+                    @Html.DropDownList("iidrol", listaRol, new { @class = "form-control" })
+                    @Html.Label("Mensaje Pagina")
+                    @Html.DropDownList("iidpagina", listaPagina, new { @class = "form-control" })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCerrar" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit"  class="btn btn-primary">Aceptar</button>
+                </div>
+            }
+            <div id="DivErrorRolPagina"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var iidrol = document.getElementById("iidrolFiltrar");
+    iidrol.onchange = function () {
+        $("#frmFiltro").trigger("submit")
+    }
+    function limpiar() {
+        document.getElementById("DivErrorRolPagina").innerHTML = "";
+        document.getElementById("iidrol").value = "";
+        document.getElementById("iidpagina").value = "";
+    }
+    function Agregar() {
+        document.getElementById("Titulo").value = -1;
+        limpiar();
+    }
+    function Guardar(Resultado) {
+        if (Resultado == "1" || Resultado == "0") {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnCerrar").click();
+            alert("Se ha guardado correctamente");
+        } else {
+            alert("Ha ocurrido un error y no se ha agregado")
+        }
+    }
+    function Editar(idrolPagina) {
+        limpiar();
+        document.getElementById("Titulo").value = idrolPagina;
+        $.get("recuperarDatos/?Titulo=" + idrolPagina, function (Data) {
+            document.getElementById("iidrol").value = Data.iidrol;
+            document.getElementById("iidpagina").value = Data.iidpagina;
+        })
+    }
+    function Eliminar(idRolPagina) {
+        document.getElementById("Titulo").value = idRolPagina;
+
+    }
+    function EliminarDato() {
+        var id = document.getElementById("Titulo").value;
+        $.get("Eliminar/?Titulo=" + id, function (data) {
+            if (data == "1") {
+                $("#frmFiltro").trigger("submit");
+                alert("Se ejecuto con exito");
+                document.getElementById("btnCerrarConfirmacion").click();
+            }
+        })
+    }
+</script>

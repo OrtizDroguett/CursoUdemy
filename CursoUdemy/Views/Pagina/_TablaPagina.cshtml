@@ -1,0 +1,42 @@
+﻿@model List<CursoUdemy.Models.PaginaMV>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => Model[0].iidpagina)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model[0].mensaje)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model[0].accion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model[0].controlador)
+        </th>
+        <th width="12%">Operaciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.iidpagina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mensaje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.accion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.controlador)
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary fa fa-edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="Editar(@item.iidpagina)"></button>
+                <button type="button" class="fa fa-trash btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdropConfirmacion" onclick="Eliminar(@item.iidpagina)"></button>
+            </td>
+        </tr>
+    }
+
+</table>
